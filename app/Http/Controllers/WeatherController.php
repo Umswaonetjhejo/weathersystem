@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Forecast;
 use App\Models\Weather;
 use Illuminate\Support\Facades\Http;
 
@@ -20,12 +21,16 @@ class WeatherController extends Controller
         //Call method to get today's weather
         $todayWeather = $this->weather($location['city'], $location['country_code'], $units, $lan);
 
+        //Save current weather response
         $saveTodayWeather = $this->saveTodayWeather($todayWeather);
 
         if($saveTodayWeather == true)
         {
             //Call method to get weather for the next 5 days
             $next5days = $this->next5days($location['city'], $location['country_code'], $units, $lan);
+
+            //Save next 5 days weather response
+            $saveNext5DaysWeather = $this->saveNext5DaysWeather($next5days);
         }
 
         //Declare and array to store future dates weather form $next5days list element
@@ -60,9 +65,6 @@ class WeatherController extends Controller
             }
 
         }
-        //dump($todayWeather);
-
-        dump($next5days);
 
         if($todayWeather['weather'][0]['main'] == 'Clear')
         {
@@ -141,5 +143,19 @@ class WeatherController extends Controller
         $weather->cod = $todayWeather['cod'];
 
         return $weather->save();
+    }
+
+    public function saveNext5DaysWeather($next5days)
+    {
+        //Remove the rows from the table
+        Forecast::truncate('forecasts');
+        $forecast = new Forecast();
+        $forecast->cod = $next5days['cod'];
+        $forecast->message = $next5days['message'];
+        $forecast->cnt = $next5days['cnt'];
+        $forecast->list = $next5days['list'];
+        $forecast->city = $next5days['city'];
+
+        return $forecast->save();
     }
 }
