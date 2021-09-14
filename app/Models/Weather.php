@@ -16,5 +16,7 @@ class Weather extends Model
         'wind' => 'json',
         'clouds' => 'json',
         'sys' => 'json',
+        'list' => 'json',
+        'city' => 'json',
     ];
 }

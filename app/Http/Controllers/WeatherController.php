@@ -3,9 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Weather;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Collection;
 
 class WeatherController extends Controller
 {
@@ -64,7 +62,7 @@ class WeatherController extends Controller
         }
         //dump($todayWeather);
 
-        //dump($futureDates);
+        dump($next5days);
 
         if($todayWeather['weather'][0]['main'] == 'Clear')
         {
