@@ -19,7 +19,7 @@ class BlockIpMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        if($request->ip() != $this->blockIps)
+        if($request->ip() == $this->blockIps)
         {
             return response()->json(['message' => "You don't have permission to access this website."]);
         }
